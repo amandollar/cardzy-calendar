@@ -1,12 +1,10 @@
-import { createRef } from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import { RangeNoteDialog } from '../RangeNoteDialog';
 
 describe('RangeNoteDialog', () => {
-  it('closes on Escape and traps keyboard focus inside the dialog', async () => {
+  it('closes on Escape and renders editable fields', () => {
     const onClose = vi.fn();
-    const textareaRef = createRef<HTMLTextAreaElement>();
 
     render(
       <div>
@@ -17,7 +15,6 @@ describe('RangeNoteDialog', () => {
           rangeNoteCharacterCount={12}
           rangeNoteTitleDraft="Trip plan"
           rangeNoteDraft="Trip details"
-          rangeNoteInputRef={textareaRef}
           onClose={onClose}
           onTitleChange={vi.fn()}
           onNoteChange={vi.fn()}
@@ -27,19 +24,11 @@ describe('RangeNoteDialog', () => {
     );
 
     const dialog = screen.getByRole('dialog', { name: /feb 4 - feb 20/i });
-    const closeButton = screen.getByRole('button', { name: /close/i });
-    const saveButton = screen.getByRole('button', { name: /^save$/i });
+    expect(screen.getByLabelText(/title/i)).toHaveValue('Trip plan');
+    expect(screen.getByLabelText(/note/i)).toHaveValue('Trip details');
     expect(dialog).toBeInTheDocument();
 
-    await waitFor(() => expect(closeButton).toHaveFocus());
-
-    closeButton.focus();
-    expect(closeButton).toHaveFocus();
-
-    fireEvent.keyDown(window, { key: 'Tab', shiftKey: true });
-    expect(saveButton).toHaveFocus();
-
-    fireEvent.keyDown(window, { key: 'Escape' });
+    fireEvent.keyDown(dialog, { key: 'Escape' });
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 });

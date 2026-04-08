@@ -52,8 +52,6 @@ export default function Calendar() {
   const today = startOfDay(new Date());
   const initialSnapshot = getDefaultSnapshot();
   const hasSavedRef = useRef(false);
-  const rangeNoteInputRef = useRef<HTMLTextAreaElement | null>(null);
-  const monthMemoInputRef = useRef<HTMLTextAreaElement | null>(null);
 
   const [displayMonth, setDisplayMonth] = useState(initialSnapshot.displayMonth);
   const [selection, setSelection] = useState<DateRange>(initialSnapshot.selection);
@@ -221,34 +219,6 @@ export default function Calendar() {
     setRangeNoteTitleDraft(nextEntry?.title ?? '');
     setRangeNoteDraft(nextEntry?.body ?? '');
   }, [activeRangeKey, planner.rangeNotes]);
-
-  useEffect(() => {
-    if (!isRangeDialogOpen) {
-      return;
-    }
-
-    window.setTimeout(() => {
-      rangeNoteInputRef.current?.focus();
-      rangeNoteInputRef.current?.setSelectionRange(
-        rangeNoteInputRef.current.value.length,
-        rangeNoteInputRef.current.value.length,
-      );
-    }, 80);
-  }, [isRangeDialogOpen]);
-
-  useEffect(() => {
-    if (!isMonthDialogOpen) {
-      return;
-    }
-
-    window.setTimeout(() => {
-      monthMemoInputRef.current?.focus();
-      monthMemoInputRef.current?.setSelectionRange(
-        monthMemoInputRef.current.value.length,
-        monthMemoInputRef.current.value.length,
-      );
-    }, 80);
-  }, [isMonthDialogOpen]);
 
   const handleDayClick = (date: Date) => {
     const normalized = startOfDay(date);
@@ -482,7 +452,6 @@ export default function Calendar() {
         rangeNoteCharacterCount={rangeNoteCharacterCount}
         rangeNoteTitleDraft={rangeNoteTitleDraft}
         rangeNoteDraft={rangeNoteDraft}
-        rangeNoteInputRef={rangeNoteInputRef}
         onClose={() => setIsRangeDialogOpen(false)}
         onTitleChange={setRangeNoteTitleDraft}
         onNoteChange={setRangeNoteDraft}
@@ -494,7 +463,6 @@ export default function Calendar() {
         displayMonth={displayMonth}
         completionRatio={completionRatio}
         monthMemo={monthMemo}
-        monthMemoInputRef={monthMemoInputRef}
         taskDraft={taskDraft}
         activeTasks={activeTasks}
         onClose={() => setIsMonthDialogOpen(false)}
