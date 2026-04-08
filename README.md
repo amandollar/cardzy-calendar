@@ -105,3 +105,12 @@ npm run start
 
 - Planner data is stored locally in the browser using `localStorage`.
 - The project is frontend-only and does not use a backend or database.
+
+## Additional Documentation
+
+Detailed technical documentation is available in the `docs/` folder:
+
+- [`docs/architecture.md`](./docs/architecture.md)
+- [`docs/state-and-data.md`](./docs/state-and-data.md)
+- [`docs/development.md`](./docs/development.md)
+- [`docs/testing.md`](./docs/testing.md)
